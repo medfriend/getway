@@ -2,41 +2,34 @@ package httpServer
 
 import (
 	"fmt"
-	"getway-go/jwt"
-	"net/http"
+	"getway-go/httpServer/middleware"
+	"github.com/gin-gonic/gin"
+	"os"
 )
 
-// TODO crear logica de listas blancas
 func InitHttpServer() {
-	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprintf(w, "Hola desde %s!", "getway-go")
+	r := gin.Default()
 
-		corsConfig(w, r)
+	whitelist := []string{
+		"/medfri-getway/test",
+	}
 
-		authHeader := r.Header.Get("Authorization")
+	r.Use(middleware.Corsmiddleware())
+	r.Use(middleware.Authmiddleware(whitelist))
 
-		token, err := jwt.ValidateJWT(authHeader)
+	r.Any(
+		fmt.Sprintf("%s/*path", os.Getenv("SERVICE_PATH")),
+		func(c *gin.Context) {
 
-		//TODO empezar a crear request error handler
-		if err != nil || !token.Valid {
-			fmt.Println("Token inválido:", err)
-			return
-		}
+			c.JSON(200, gin.H{
+				"path":   c.Request.URL.Path,
+				"method": c.Request.Method,
+			})
+		})
 
-		fmt.Println(token)
+	err := r.Run(fmt.Sprintf(":%s", os.Getenv("SERVICE_PORT")))
 
-		fmt.Println("test done")
-
-	})
-}
-
-func corsConfig(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Access-Control-Allow-Origin", "*")
-	w.Header().Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
-	w.Header().Set("Access-Control-Allow-Headers", "Authorization, Content-Type")
-
-	if r.Method == http.MethodOptions {
-		w.WriteHeader(http.StatusNoContent)
+	if err != nil {
 		return
 	}
 }

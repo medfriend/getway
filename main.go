@@ -5,7 +5,6 @@ import (
 	"getway-go/httpServer"
 	"github.com/joho/godotenv"
 	"log"
-	"net/http"
 )
 
 func loadEnv() {
@@ -23,7 +22,5 @@ func main() {
 	consul.ConnectToConsul()
 
 	httpServer.InitHttpServer()
-	http.HandleFunc("/health", consul.HealthCheck)
 
-	log.Fatal(http.ListenAndServe(":8080", nil))
 }

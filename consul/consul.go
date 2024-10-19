@@ -33,11 +33,11 @@ func ConnectToConsul() {
 		Name:    os.Getenv("SERVICE_NAME"),
 		Address: os.Getenv("SERVICE_ADDRESS"),
 		Port:    8080,
-		Check: &api.AgentServiceCheck{
-			HTTP:     fmt.Sprintf("http://%s:%d/health", serviceAddress, 8080),
-			Interval: "10s",
-			Timeout:  "5s",
-		},
+		//Check: &api.AgentServiceCheck{
+		//	HTTP:     fmt.Sprintf("http://%s:%d/health", serviceAddress, 8080),
+		//	Interval: "10s",
+		//	Timeout:  "5s",
+		//},
 	}
 
 	err = client.Agent().ServiceRegister(service)
