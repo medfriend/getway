@@ -71,3 +71,22 @@ func HealthCheck(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 	w.Write([]byte("Service is healthy"))
 }
+
+func GetServiceAddressAndPort(serviceName string) (string, int, error) {
+	client, err := api.NewClient(api.DefaultConfig())
+	if err != nil {
+		return "", 0, fmt.Errorf("error creating Consul client: %v", err)
+	}
+
+	services, _, err := client.Catalog().Service(serviceName, "", nil)
+	if err != nil {
+		return "", 0, fmt.Errorf("error retrieving service: %v", err)
+	}
+
+	if len(services) == 0 {
+		return "", 0, fmt.Errorf("no instances found for service: %s", serviceName)
+	}
+
+	service := services[0]
+	return service.Address, service.ServicePort, nil
+}
