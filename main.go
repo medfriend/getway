@@ -22,8 +22,8 @@ func main() {
 
 	consul.ConnectToConsul()
 
-	http.HandleFunc("/health", consul.HealthCheck)
 	httpServer.InitHttpServer()
+	http.HandleFunc("/health", consul.HealthCheck)
 
 	log.Fatal(http.ListenAndServe(":8080", nil))
 }
