@@ -1,0 +1,23 @@
+run:
+  timeout: 5m
+
+linters:
+  enable:
+    - errcheck        # Verifica que los errores se manejen
+    - gosimple        # Sugiere simplificaciones
+    - govet           # Detecta errores específicos de Go
+    - staticcheck     # Detecta problemas comunes de estilo y errores de programación
+    - unused          # Detecta variables, funciones y tipos no usados
+    - gocyclo         # Mide la complejidad ciclomática
+    - gofmt           # Verifica si el código está formateado correctamente
+    - gosec           # Detecta problemas de seguridad
+  disable:
+    - goconst         # Deshabilita la recomendación de usar constantes
+
+issues:
+  max-issues-per-linter: 0
+  max-same-issues: 0
+
+linters-settings:
+  gocyclo:
+    min-complexity: 15
