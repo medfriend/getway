@@ -1,6 +1,7 @@
 package redirectgetway
 
 import (
+	"encoding/json"
 	"fmt"
 	"getway-go/util/consul"
 	"github.com/gin-gonic/gin"
@@ -14,32 +15,36 @@ func Redirectgetway(c *gin.Context) {
 
 	address, port, err := consul.GetServiceAddressAndPort(os.Getenv("SERVICE_CACHE"))
 
-	getCache(c, address, port)
-
 	if err != nil {
 		fmt.Println("cache no se encuentra en consul")
 	}
+	if err == nil {
+		body, errCache := getCache(c, address, port)
 
-	c.JSON(200, gin.H{
-		"path":   c.Request.URL.Path,
-		"method": c.Request.Method,
-	})
+		if body["data"] != "data no avalible on the cache" {
+			c.JSON(200, body)
+			c.Abort()
+			return
+		}
+
+		if errCache != nil || body["data"] == "data no avalible on the cache" {
+			fmt.Println("entonces mi gente")
+			return
+		}
+	}
+
 }
 
-func getCache(c *gin.Context, address string, port int) {
+func getCache(c *gin.Context, address string, port int) (map[string]interface{}, error) {
 
 	pathParts := strings.Split(c.Request.URL.Path, "/")
 	service := strings.Join(pathParts[2:], "/")
 
 	targetURL := fmt.Sprintf("http://%s:%d/medfri-cache/%s", address, port, service)
 
-	fmt.Println(targetURL)
-
 	req, err := http.NewRequest("GET", targetURL, c.Request.Body)
 	if err != nil {
-		fmt.Println("Error creando la nueva solicitud", err)
-		c.JSON(500, gin.H{"error": "Error creando la solicitud al servicio de cache"})
-		return
+		return nil, fmt.Errorf("Error creando la nueva solicitud")
 	}
 
 	for key, values := range c.Request.Header {
@@ -51,19 +56,21 @@ func getCache(c *gin.Context, address string, port int) {
 	client := &http.Client{}
 	resp, err := client.Do(req)
 	if err != nil {
-		fmt.Println("Error al realizar la solicitud al servicio de cache", err)
-		c.JSON(500, gin.H{"error": "No se pudo comunicar con el servicio de cache"})
-		return
+		return nil, fmt.Errorf("Error realizar la solicitud al servicio de cache")
 	}
+
 	defer resp.Body.Close()
 
 	body, err := io.ReadAll(resp.Body)
 	if err != nil {
-		fmt.Println("Error al leer la respuesta del servicio de cache", err)
-		c.JSON(500, gin.H{"error": "Error al leer la respuesta del servicio de cache"})
-		return
+		return nil, fmt.Errorf("Error al leer la respuesta del servicio de cache")
 	}
 
-	fmt.Println(string(body))
+	var result map[string]interface{}
 
+	if err := json.Unmarshal(body, &result); err != nil {
+		return nil, fmt.Errorf("error al decodificar la respuesta del servicio de cache")
+	}
+
+	return result, nil
 }
