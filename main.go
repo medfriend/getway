@@ -29,5 +29,4 @@ func main() {
 	go httpServer.InitHttpServer(taskQueue)
 
 	worker.HandleShutdown(stop, consulClient)
-
 }
