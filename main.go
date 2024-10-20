@@ -2,26 +2,17 @@ package main
 
 import (
 	"fmt"
-	"getway-go/consul"
 	"getway-go/httpServer"
-	"getway-go/worker"
-	"github.com/joho/godotenv"
-	"log"
+	"getway-go/util/consul"
+	"getway-go/util/env"
+	"getway-go/util/worker"
 	"net/http"
 	"runtime"
 )
 
-func loadEnv() {
-	err := godotenv.Load(".env")
-	if err != nil {
-		log.Fatal("Error loading .env file")
-	}
-}
-
-// TODO agregar el modulo de lint y validacion test
 func main() {
 
-	loadEnv()
+	env.LoadEnv()
 
 	consulClient := consul.ConnectToConsul()
 

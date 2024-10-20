@@ -2,7 +2,7 @@ package redirectgetway
 
 import (
 	"fmt"
-	"getway-go/consul"
+	"getway-go/util/consul"
 	"github.com/gin-gonic/gin"
 	"io"
 	"net/http"
