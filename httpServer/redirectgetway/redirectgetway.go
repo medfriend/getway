@@ -30,6 +30,7 @@ func handlerCache(c *gin.Context, address string, port int) {
 
 	pathParts := strings.Split(c.Request.URL.Path, "/")
 	service := strings.Join(pathParts[2:], "/")
+
 	targetURL := fmt.Sprintf("http://%s:%d/medfri-cache/%s", address, port, service)
 
 	req, err := http.NewRequest(c.Request.Method, targetURL, c.Request.Body)
