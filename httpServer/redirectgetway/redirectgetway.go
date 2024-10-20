@@ -3,8 +3,8 @@ package redirectgetway
 import (
 	"encoding/json"
 	"fmt"
-	"getway-go/util/consul"
 	"github.com/gin-gonic/gin"
+	"github.com/medfriend/shared-commons-go/util/consul"
 	"io"
 	"net/http"
 	"os"

@@ -3,9 +3,9 @@ package main
 import (
 	"fmt"
 	"getway-go/httpServer"
-	"getway-go/util/consul"
-	"getway-go/util/env"
-	"getway-go/util/worker"
+	"github.com/medfriend/shared-commons-go/util/consul"
+	"github.com/medfriend/shared-commons-go/util/env"
+	"github.com/medfriend/shared-commons-go/util/worker"
 	"net/http"
 	"runtime"
 )
