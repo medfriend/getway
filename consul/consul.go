@@ -6,11 +6,9 @@ import (
 	"log"
 	"net/http"
 	"os"
-	"os/signal"
-	"syscall"
 )
 
-func ConnectToConsul() {
+func ConnectToConsul() *api.Client {
 
 	client, err := api.NewClient(api.DefaultConfig())
 
@@ -48,27 +46,7 @@ func ConnectToConsul() {
 
 	fmt.Println("Service registered successfully")
 
-	//handleShutdown(client, serviceID)
-}
-
-func handleShutdown(client *api.Client, serviceID string) {
-
-	go func() {
-		sigChan := make(chan os.Signal, 1)
-		signal.Notify(sigChan, syscall.SIGINT, syscall.SIGTERM)
-
-		sig := <-sigChan
-		fmt.Printf("Caught signal %s: shutting down service\n", sig)
-
-		err := client.Agent().ServiceDeregister(serviceID)
-		if err != nil {
-			log.Fatalf("Error deregistering service: %v", err)
-		}
-
-		fmt.Println("Service deregistered successfully")
-
-		os.Exit(0)
-	}()
+	return client
 }
 
 func HealthCheck(w http.ResponseWriter, r *http.Request) {
