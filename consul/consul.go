@@ -48,7 +48,7 @@ func ConnectToConsul() {
 
 	fmt.Println("Service registered successfully")
 
-	handleShutdown(client, serviceID)
+	//handleShutdown(client, serviceID)
 }
 
 func handleShutdown(client *api.Client, serviceID string) {
@@ -66,6 +66,8 @@ func handleShutdown(client *api.Client, serviceID string) {
 		}
 
 		fmt.Println("Service deregistered successfully")
+
+		os.Exit(0)
 	}()
 }
 

@@ -14,7 +14,7 @@ func Redirectgetway(c *gin.Context) {
 
 	address, port, err := consul.GetServiceAddressAndPort(os.Getenv("SERVICE_CACHE"))
 
-	handlerCache(c, address, port)
+	getCache(c, address, port)
 
 	if err != nil {
 		fmt.Println("cache no se encuentra en consul")
@@ -26,14 +26,16 @@ func Redirectgetway(c *gin.Context) {
 	})
 }
 
-func handlerCache(c *gin.Context, address string, port int) {
+func getCache(c *gin.Context, address string, port int) {
 
 	pathParts := strings.Split(c.Request.URL.Path, "/")
 	service := strings.Join(pathParts[2:], "/")
 
 	targetURL := fmt.Sprintf("http://%s:%d/medfri-cache/%s", address, port, service)
 
-	req, err := http.NewRequest(c.Request.Method, targetURL, c.Request.Body)
+	fmt.Println(targetURL)
+
+	req, err := http.NewRequest("GET", targetURL, c.Request.Body)
 	if err != nil {
 		fmt.Println("Error creando la nueva solicitud", err)
 		c.JSON(500, gin.H{"error": "Error creando la solicitud al servicio de cache"})

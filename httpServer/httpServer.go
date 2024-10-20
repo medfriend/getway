@@ -5,10 +5,11 @@ import (
 	"getway-go/httpServer/middleware"
 	"getway-go/httpServer/redirectgetway"
 	"github.com/gin-gonic/gin"
+	"net/http"
 	"os"
 )
 
-func InitHttpServer() {
+func InitHttpServer(taskQueue chan *http.Request) {
 	r := gin.Default()
 
 	whitelist := []string{
@@ -20,7 +21,10 @@ func InitHttpServer() {
 
 	r.Any(
 		fmt.Sprintf("%s/*path", os.Getenv("SERVICE_PATH")),
-		redirectgetway.Redirectgetway)
+		func(c *gin.Context) {
+			taskQueue <- c.Request
+			redirectgetway.Redirectgetway(c)
+		})
 
 	err := r.Run(fmt.Sprintf(":%s", os.Getenv("SERVICE_PORT")))
 
