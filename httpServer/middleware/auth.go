@@ -10,10 +10,12 @@ import (
 func Authmiddleware(whitelist []string) gin.HandlerFunc {
 	return func(c *gin.Context) {
 
-		fmt.Println(c.Request.URL.Path)
+		fmt.Println("me esta llegando ", c.Request.URL.Path)
 
 		for _, path := range whitelist {
-			if c.Request.URL.Path == path {
+			fmt.Println(path)
+			if true {
+
 				c.Next()
 				return
 			}
