@@ -15,11 +15,14 @@ func Redirectgetway(c *gin.Context) {
 
 	cacheServiceName := os.Getenv("SERVICE_CACHE")
 
+	fmt.Println(cacheServiceName)
+
 	address, port, err := consul.GetServiceAddressAndPort(cacheServiceName)
 
 	if err != nil {
 		fmt.Println("cache no se encuentra en consul")
 	}
+
 	if err == nil {
 		body, errCache := getServiceResponse(c, address, port, cacheServiceName, "GET")
 
