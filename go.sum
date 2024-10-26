@@ -152,6 +152,9 @@ github.com/medfriend/shared-commons-go v0.0.1 h1:pWPTRRnGFbJ2DQuxyBxEuCeFBhbsW7s
 github.com/medfriend/shared-commons-go v0.0.1/go.mod h1:3MBfFzB8Fu47ub/jWnPt8Pdetm1XLSlnOtwvUjupJGM=
 github.com/medfriend/shared-commons-go v0.0.3 h1:ZHrCsQ0TXH+4jFN2fX89zLBj8G5+TGQ9sLN1/7bJ7t4=
 github.com/medfriend/shared-commons-go v0.0.3/go.mod h1:3MBfFzB8Fu47ub/jWnPt8Pdetm1XLSlnOtwvUjupJGM=
+github.com/medfriend/shared-commons-go v0.0.4/go.mod h1:3MBfFzB8Fu47ub/jWnPt8Pdetm1XLSlnOtwvUjupJGM=
+github.com/medfriend/shared-commons-go v0.0.5 h1:7rFwLN1Z+zDsNS8RI1cjLqVmFPp0U7SAxUGDKyElzEs=
+github.com/medfriend/shared-commons-go v0.0.5/go.mod h1:3MBfFzB8Fu47ub/jWnPt8Pdetm1XLSlnOtwvUjupJGM=
 github.com/miekg/dns v1.1.26/go.mod h1:bPDLeHnStXmXAq1m/Ch/hvfNHr14JKNPMBo3VZKjuso=
 github.com/miekg/dns v1.1.41 h1:WMszZWJG0XmzbK9FEmzH2TVcqYzFesusSIB41b8KHxY=
 github.com/miekg/dns v1.1.41/go.mod h1:p6aan82bvRIyn+zDIv9xYNUpwa73JcSh9BKwknJysuI=

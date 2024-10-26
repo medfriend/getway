@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"getway-go/consulRegister"
 	"getway-go/httpServer"
 	"github.com/medfriend/shared-commons-go/util/consul"
 	"github.com/medfriend/shared-commons-go/util/env"
@@ -15,6 +16,8 @@ func main() {
 	env.LoadEnv()
 
 	consulClient := consul.ConnectToConsul()
+
+	consulRegister.RegisterConstants(consulClient)
 
 	numCPUs := runtime.NumCPU()
 
