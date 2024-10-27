@@ -39,12 +39,13 @@ func RegisterConstants(consulClient *api.Client) {
 	}
 
 	cacheData := map[string]string{
-		"SERVICE_ID":    os.Getenv("CACHE_SERVICE_ID"),
-		"SERVICE_NAME":  os.Getenv("CACHE_SERVICE_NAME"),
-		"SERVICE_PORT":  os.Getenv("CACHE_SERVICE_PORT"),
-		"SERVICE_PATH":  os.Getenv("CACHE_SERVICE_ADDRESS"),
-		"REDIS_ADDRESS": os.Getenv("REDIS_ADDRESS"),
-		"REDIS_PORT":    os.Getenv("REDIS_PORT"),
+		"SERVICE_ID":     os.Getenv("CACHE_SERVICE_ID"),
+		"SERVICE_NAME":   os.Getenv("CACHE_SERVICE_NAME"),
+		"SERVICE_PORT":   os.Getenv("CACHE_SERVICE_PORT"),
+		"SERVICE_PATH":   os.Getenv("CACHE_SERVICE_ADDRESS"),
+		"REDIS_ADDRESS":  os.Getenv("REDIS_ADDRESS"),
+		"REDIS_PORT":     os.Getenv("REDIS_PORT"),
+		"REDIS_PASSWORD": os.Getenv("REDIS_PASSWORD"),
 	}
 
 	securityData := map[string]string{
