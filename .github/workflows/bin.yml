@@ -1,0 +1,32 @@
+name: Build and Store Binary on Push to Main
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v3
+
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: '1.20'  # Cambia a la versión de Go que necesitas
+
+      - name: Build project
+        run: |
+          go build -o myproject-binary
+
+      - name: Commit and push binary to binaries branch
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git checkout -B binaries
+          mv myproject-binary path/to/store/binary/  # Cambia el path si es necesario
+          git add path/to/store/binary/
+          git commit -m "Update binary after push to main"
+          git push -u origin binaries --force
