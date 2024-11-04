@@ -55,10 +55,30 @@ func RegisterConstants(consulClient *api.Client) {
 		"SERVICE_PATH": os.Getenv("SECURITY_SERVICE_ADDRESS"),
 	}
 
+	dbLocalData := map[string]string{
+		"DB_HOST":           os.Getenv("DB_HOST_LOCAL"),
+		"DB_PORT":           os.Getenv("DB_PORT_LOCAL"),
+		"DB_USER":           os.Getenv("DB_USER_LOCAL"),
+		"DB_PASSWORD":       os.Getenv("DB_PASSWORD_LOCAL"),
+		"DB_NAME":           os.Getenv("DB_NAME_LOCAL"),
+		"MAX_OPEN_CONN":     os.Getenv("MAX_OPEN_CONN_LOCAL"),
+		"MAX_IDLE_CONN":     os.Getenv("MAX_IDLE_CONN_LOCAL"),
+		"MAX_LIFETIME_CONN": os.Getenv("MAX_LIFETIME_CONN_LOCAL"),
+	}
+
+	rabbitmqData := map[string]string{
+		"RABBIT_HOST":     os.Getenv("RABBIT_HOST"),
+		"RABBIT_PORT":     os.Getenv("RABBIT_PORT"),
+		"RABBIT_USER":     os.Getenv("RABBIT_USER"),
+		"RABBIT_PASSWORD": os.Getenv("RABBIT_PASSWORD"),
+	}
+
 	consul.StoreKeyValue(consulClient, "SERVICE_CACHE", os.Getenv("SERVICE_CACHE"))
 	consul.StoreKeyValue(consulClient, "JWT", os.Getenv("JWT_KEY"))
 	consul.StoreKeyValue(consulClient, "GETWAY", handleJson(getwayData))
 	consul.StoreKeyValue(consulClient, "DB", handleJson(dbData))
 	consul.StoreKeyValue(consulClient, "CACHE", handleJson(cacheData))
 	consul.StoreKeyValue(consulClient, "SECURITY", handleJson(securityData))
+	consul.StoreKeyValue(consulClient, "DB_LOCAL", handleJson(dbLocalData))
+	consul.StoreKeyValue(consulClient, "RABBIT", handleJson(rabbitmqData))
 }
