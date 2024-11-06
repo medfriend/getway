@@ -13,7 +13,7 @@ func InitHttpServer(taskQueue chan *http.Request) {
 	r := gin.Default()
 
 	whitelist := []string{
-		"/medfri-getway/security/login",
+		"/medfri-getway/security/auth",
 		"/medfri-getway/test",
 	}
 

@@ -15,8 +15,6 @@ func Redirectgetway(c *gin.Context) {
 
 	cacheServiceName := os.Getenv("SERVICE_CACHE")
 
-	fmt.Println(cacheServiceName)
-
 	address, port, err := consul.GetServiceAddressAndPort(cacheServiceName)
 
 	if err != nil {
@@ -32,9 +30,12 @@ func Redirectgetway(c *gin.Context) {
 			return
 		}
 
+		fmt.Println("respuesta del cache", body)
+
 		if errCache != nil || body["data"] == "data no avalible on the cache" {
 
 			pathParts := strings.Split(c.Request.URL.Path, "/")
+			fmt.Println("entro en esta condicion")
 
 			serviceName := fmt.Sprintf("medfri-%s", strings.Join(pathParts[2:3], "/"))
 
@@ -49,6 +50,14 @@ func Redirectgetway(c *gin.Context) {
 				port,
 				serviceName,
 				c.Request.Method)
+
+			fmt.Println("respuesta del body", body)
+
+			if len(body) == 0 {
+				c.JSON(404, gin.H{"error": "api no encontrada"})
+				c.Abort()
+				return
+			}
 
 			if body["data"] != "data no avalible on the service" {
 				c.JSON(200, body)
@@ -65,9 +74,14 @@ func Redirectgetway(c *gin.Context) {
 func getServiceResponse(c *gin.Context, address string, port int, serviceGetway string, method string) (map[string]interface{}, error) {
 
 	pathParts := strings.Split(c.Request.URL.Path, "/")
-	service := strings.Join(pathParts[2:], "/")
+	service := strings.Join(pathParts[3:], "/")
 
 	targetURL := fmt.Sprintf("http://%s:%d/%s/%s", address, port, serviceGetway, service)
+
+	fmt.Println(pathParts)
+	fmt.Println(serviceGetway)
+	fmt.Println(service)
+	fmt.Println(targetURL)
 
 	req, err := http.NewRequest(method, targetURL, c.Request.Body)
 	if err != nil {
