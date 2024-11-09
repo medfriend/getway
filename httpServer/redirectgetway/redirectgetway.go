@@ -58,7 +58,11 @@ func Redirectgetway(c *gin.Context) {
 			}
 
 			if body["data"] != "data no avalible on the service" {
-				postServiceResponse(c, address, port, cacheServiceName, "POST", true, body)
+
+				if body["error"] == nil {
+					postServiceResponse(c, address, port, cacheServiceName, "POST", true, body)
+				}
+
 				c.JSON(*serviceStatusCode, body)
 				c.Abort()
 				return

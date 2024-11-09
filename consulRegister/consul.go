@@ -48,6 +48,18 @@ func RegisterConstants(consulClient *api.Client) {
 		"REDIS_PASSWORD": os.Getenv("REDIS_PASSWORD"),
 	}
 
+	redisLocalData := map[string]string{
+		"REDIS_ADDRESS":  os.Getenv("REDIS_ADDRESS_LOCAL"),
+		"REDIS_PORT":     os.Getenv("REDIS_PORT_LOCAL"),
+		"REDIS_PASSWORD": os.Getenv("REDIS_PASSWORD_LOCAL"),
+	}
+
+	redisData := map[string]string{
+		"REDIS_ADDRESS":  os.Getenv("REDIS_ADDRESS"),
+		"REDIS_PORT":     os.Getenv("REDIS_PORT"),
+		"REDIS_PASSWORD": os.Getenv("REDIS_PASSWORD"),
+	}
+
 	securityData := map[string]string{
 		"SERVICE_ID":   os.Getenv("SECURITY_SERVICE_ID"),
 		"SERVICE_NAME": os.Getenv("SECURITY_SERVICE_NAME"),
@@ -81,4 +93,6 @@ func RegisterConstants(consulClient *api.Client) {
 	consul.StoreKeyValue(consulClient, "SECURITY", handleJson(securityData))
 	consul.StoreKeyValue(consulClient, "DB_LOCAL", handleJson(dbLocalData))
 	consul.StoreKeyValue(consulClient, "RABBIT", handleJson(rabbitmqData))
+	consul.StoreKeyValue(consulClient, "REDIS_LOCAL", handleJson(redisLocalData))
+	consul.StoreKeyValue(consulClient, "REDIS", handleJson(redisData))
 }
