@@ -14,7 +14,6 @@ func InitHttpServer(taskQueue chan *http.Request) {
 
 	whitelist := []string{
 		"/medfri-getway/security/auth",
-		"/medfri-getway/test",
 	}
 
 	r.Use(middleware.Corsmiddleware())

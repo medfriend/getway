@@ -8,6 +8,13 @@ import (
 	"strings"
 )
 
+type Claims struct {
+	User struct {
+		Usuario int `json:"usuario"`
+	} `json:"user"`
+	jwt.StandardClaims
+}
+
 func ValidateJWT(tokenString string) (*jwt.Token, error) {
 
 	jwtKey := []byte(os.Getenv("JWT_KEY"))
@@ -36,4 +43,29 @@ func splitToken(tokenString string) (string, error) {
 	}
 
 	return parts[1], nil
+}
+
+func DecodeJWT(tokenString string) (*Claims, error) {
+	jwtKey := []byte(os.Getenv("JWT_KEY"))
+
+	// Dividir el token para extraer solo el token JWT
+	tokenSplited, err := splitToken(tokenString)
+	if err != nil {
+		return nil, err
+	}
+
+	// Parsear y decodificar el token con los claims
+	token, err := jwt.ParseWithClaims(tokenSplited, &Claims{}, func(token *jwt.Token) (interface{}, error) {
+		return jwtKey, nil
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	// Verificar y extraer los claims
+	if claims, ok := token.Claims.(*Claims); ok && token.Valid {
+		return claims, nil
+	} else {
+		return nil, errors.New("token inválido o claims no válidos")
+	}
 }
