@@ -39,20 +39,29 @@ func RegisterConstants(consulClient *api.Client) {
 	}
 
 	cacheData := map[string]string{
-		"SERVICE_ID":     os.Getenv("CACHE_SERVICE_ID"),
-		"SERVICE_NAME":   os.Getenv("CACHE_SERVICE_NAME"),
-		"SERVICE_PORT":   os.Getenv("CACHE_SERVICE_PORT"),
-		"SERVICE_PATH":   os.Getenv("CACHE_SERVICE_ADDRESS"),
-		"REDIS_ADDRESS":  os.Getenv("REDIS_ADDRESS"),
-		"REDIS_PORT":     os.Getenv("REDIS_PORT"),
-		"REDIS_PASSWORD": os.Getenv("REDIS_PASSWORD"),
+		"SERVICE_ID":      os.Getenv("CACHE_SERVICE_ID"),
+		"SERVICE_NAME":    os.Getenv("CACHE_SERVICE_NAME"),
+		"SERVICE_PORT":    os.Getenv("CACHE_SERVICE_PORT"),
+		"SERVICE_PATH":    os.Getenv("CACHE_SERVICE_ADDRESS"),
+		"REDIS_ADDRESS":   os.Getenv("REDIS_ADDRESS"),
+		"REDIS_PORT":      os.Getenv("REDIS_PORT"),
+		"REDIS_PASSWORD":  os.Getenv("REDIS_PASSWORD"),
+		"SERVICE_ADDRESS": os.Getenv("SERVICE_ADDRESS"),
 	}
 
 	trazaData := map[string]string{
-		"SERVICE_ID":     os.Getenv("TRAZA_SERVICE_ID"),
-		"SERVICE_NAME":   os.Getenv("TRAZA_SERVICE_NAME"),
-		"SERVICE_PORT":   os.Getenv("TRAZA_SERVICE_PORT"),
-		"SERVICE_PATH":   os.Getenv("TRAZA_SERVICE_ADDRESS"),
+		"SERVICE_ID":   os.Getenv("TRAZA_SERVICE_ID"),
+		"SERVICE_NAME": os.Getenv("TRAZA_SERVICE_NAME"),
+		"SERVICE_PORT": os.Getenv("TRAZA_SERVICE_PORT"),
+		"SERVICE_PATH": os.Getenv("TRAZA_SERVICE_ADDRESS"),
+	}
+
+	chatBotData := map[string]string{
+		"SERVICE_ID":   os.Getenv("CHATBOT_SERVICE_ID"),
+		"SERVICE_NAME": os.Getenv("CHATBOT_SERVICE_NAME"),
+		"SERVICE_PORT": os.Getenv("CHATBOT_SERVICE_PORT"),
+		"SERVICE_PATH": os.Getenv("CHATBOT_SERVICE_ADDRESS"),
+		"KEY":          os.Getenv("CHATBOT_KEY"),
 	}
 
 	redisLocalData := map[string]string{
@@ -68,10 +77,11 @@ func RegisterConstants(consulClient *api.Client) {
 	}
 
 	securityData := map[string]string{
-		"SERVICE_ID":   os.Getenv("SECURITY_SERVICE_ID"),
-		"SERVICE_NAME": os.Getenv("SECURITY_SERVICE_NAME"),
-		"SERVICE_PORT": os.Getenv("SECURITY_SERVICE_PORT"),
-		"SERVICE_PATH": os.Getenv("SECURITY_SERVICE_ADDRESS"),
+		"SERVICE_ID":      os.Getenv("SECURITY_SERVICE_ID"),
+		"SERVICE_NAME":    os.Getenv("SECURITY_SERVICE_NAME"),
+		"SERVICE_PORT":    os.Getenv("SECURITY_SERVICE_PORT"),
+		"SERVICE_PATH":    os.Getenv("SECURITY_SERVICE_ADDRESS"),
+		"SERVICE_ADDRESS": os.Getenv("SECURITY_SERVICE_ADDRESS"),
 	}
 
 	dbLocalData := map[string]string{
@@ -103,4 +113,5 @@ func RegisterConstants(consulClient *api.Client) {
 	consul.StoreKeyValue(consulClient, "RABBIT", handleJson(rabbitmqData))
 	consul.StoreKeyValue(consulClient, "REDIS_LOCAL", handleJson(redisLocalData))
 	consul.StoreKeyValue(consulClient, "REDIS", handleJson(redisData))
+	consul.StoreKeyValue(consulClient, "CHATBOT", handleJson(chatBotData))
 }

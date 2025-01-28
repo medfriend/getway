@@ -23,8 +23,9 @@ func Redirectgetway(c *gin.Context) {
 	}
 
 	if err == nil {
-		
-		body, errCache, cacheStatusCode := service.GetServiceResponse(c, address, port, cacheServiceName, "GET", true)
+
+		// TODO validar el valor de localhost y el address que devuelve consul
+		body, errCache, cacheStatusCode := service.GetServiceResponse(c, "localhost", port, cacheServiceName, "GET", true)
 
 		if body["data"] != "data no avalible on the cache" {
 			c.JSON(*cacheStatusCode, body)
@@ -44,14 +45,15 @@ func registerOnService(c *gin.Context, address string, port int, cacheServiceNam
 	ignoreCache := c.Request.Header.Get("ignore-cache")
 	pathParts := strings.Split(c.Request.URL.Path, "/")
 	serviceName := fmt.Sprintf("medfri-%s", strings.Join(pathParts[2:3], "/"))
-	addressService, portService, err := consul.GetServiceAddressAndPort(serviceName)
+	_, portService, err := consul.GetServiceAddressAndPort(serviceName)
 
 	if err != nil {
 		fmt.Println(fmt.Sprintf("%s no se encuentra en consulRegister", serviceName))
 	}
 
+	// TODO validar el addressService de consul
 	body, err, serviceStatusCode := service.GetServiceResponse(c,
-		addressService,
+		"localhost",
 		portService,
 		serviceName,
 		c.Request.Method,
