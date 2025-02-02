@@ -7,14 +7,14 @@ import (
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"os"
+	"time"
 )
 
 func InitHttpServer(taskQueue chan *http.Request) {
 	r := gin.Default()
 
 	whitelist := []string{
-		"/medfri-getway/security/login",
-		"/medfri-getway/test",
+		"/medfri-getway/security/auth",
 	}
 
 	r.Use(middleware.Corsmiddleware())
@@ -23,7 +23,8 @@ func InitHttpServer(taskQueue chan *http.Request) {
 	r.Any(
 		fmt.Sprintf("%s/*path", os.Getenv("SERVICE_PATH")),
 		func(c *gin.Context) {
-			taskQueue <- c.Request
+			//taskQueue <- c.Request
+			time.Sleep(time.Second)
 			redirectgetway.Redirectgetway(c)
 		})
 
