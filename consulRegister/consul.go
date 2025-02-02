@@ -93,6 +93,8 @@ func RegisterConstants(consulClient *api.Client) {
 		"MAX_OPEN_CONN":     os.Getenv("MAX_OPEN_CONN_LOCAL"),
 		"MAX_IDLE_CONN":     os.Getenv("MAX_IDLE_CONN_LOCAL"),
 		"MAX_LIFETIME_CONN": os.Getenv("MAX_LIFETIME_CONN_LOCAL"),
+		"DB_NAME_SECURITY":  os.Getenv("DB_NAME_SECURITY_LOCAL"),
+		"DB_NAME_SERVICE":   os.Getenv("DB_NAME_SERVICE_LOCAL"),
 	}
 
 	rabbitmqData := map[string]string{
