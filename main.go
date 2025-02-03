@@ -8,6 +8,7 @@ import (
 	"github.com/medfriend/shared-commons-go/util/env"
 	"github.com/medfriend/shared-commons-go/util/worker"
 	"net/http"
+	"os"
 	"runtime"
 )
 
@@ -15,7 +16,21 @@ func main() {
 
 	env.LoadEnv()
 
-	consulClient := consul.ConnectToConsul()
+	deployment := os.Getenv("DEPLOYMENT")
+
+	consulHost := "localhost"
+
+	if deployment == "DOCKER" {
+		consulHost = os.Getenv("CONSUL_ADDRESS_DOCKER")
+	}
+
+	if deployment == "KUBE" {
+		consulHost = os.Getenv("CONSUL_ADDRESS_KUBE")
+	}
+
+	consulAddress := fmt.Sprintf("http://%s:8500", consulHost)
+
+	consulClient := consul.ConnectToConsul(consulAddress)
 
 	consulRegister.RegisterConstants(consulClient)
 
