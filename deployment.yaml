@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: md-get-way-go
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: md-get-way-go
+  template:
+    metadata:
+      labels:
+        app: md-get-way-go
+    spec:
+      containers:
+      - name: md-get-way-go
+        image: md-get-way-go:14  # Usa exactamente este nombre y tag
+        imagePullPolicy: Never  # No intentará descargar la imagen de un registro
+        ports:
+        - containerPort: 8070
