@@ -1,20 +1,22 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: md-get-way-go
+  name: md-getway-go
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: md-get-way-go
+      app: md-getway-go
   template:
     metadata:
       labels:
-        app: md-get-way-go
+        app: md-getway-go
     spec:
+      hostNetwork: true  # Añade esta línea para usar la red del host
+      dnsPolicy: ClusterFirstWithHostNet  # Ajusta la política de DNS adecuada para hostNetwork
       containers:
-      - name: md-get-way-go
-        image: md-get-way-go:14  # Usa exactamente este nombre y tag
-        imagePullPolicy: Never  # No intentará descargar la imagen de un registro
+      - name: md-getway-go
+        image: md-getway-go:15
+        imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 8070

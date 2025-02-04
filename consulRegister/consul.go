@@ -56,6 +56,13 @@ func RegisterConstants(consulClient *api.Client) {
 		"SERVICE_PATH": os.Getenv("TRAZA_SERVICE_ADDRESS"),
 	}
 
+	ServiceData := map[string]string{
+		"SERVICE_ID":   os.Getenv("SERVICE_SERVICE_ID"),
+		"SERVICE_NAME": os.Getenv("SERVICE_SERVICE_NAME"),
+		"SERVICE_PORT": os.Getenv("SERVICE_SERVICE_PORT"),
+		"SERVICE_PATH": os.Getenv("SERVICE_SERVICE_ADDRESS"),
+	}
+
 	chatBotData := map[string]string{
 		"SERVICE_ID":   os.Getenv("CHATBOT_SERVICE_ID"),
 		"SERVICE_NAME": os.Getenv("CHATBOT_SERVICE_NAME"),
@@ -110,6 +117,7 @@ func RegisterConstants(consulClient *api.Client) {
 	consul.StoreKeyValue(consulClient, "DB", handleJson(dbData))
 	consul.StoreKeyValue(consulClient, "CACHE", handleJson(cacheData))
 	consul.StoreKeyValue(consulClient, "TRAZA", handleJson(trazaData))
+	consul.StoreKeyValue(consulClient, "SERVICE", handleJson(ServiceData))
 	consul.StoreKeyValue(consulClient, "SECURITY", handleJson(securityData))
 	consul.StoreKeyValue(consulClient, "DB_LOCAL", handleJson(dbLocalData))
 	consul.StoreKeyValue(consulClient, "RABBIT", handleJson(rabbitmqData))
