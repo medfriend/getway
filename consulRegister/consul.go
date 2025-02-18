@@ -63,12 +63,26 @@ func RegisterConstants(consulClient *api.Client) {
 		"SERVICE_PATH": os.Getenv("SERVICE_SERVICE_ADDRESS"),
 	}
 
+	PaymentData := map[string]string{
+		"SERVICE_ID":   os.Getenv("PAYMENT_SERVICE_ID"),
+		"SERVICE_NAME": os.Getenv("PAYMENT_SERVICE_NAME"),
+		"SERVICE_PORT": os.Getenv("PAYMENT_SERVICE_PORT"),
+		"SERVICE_PATH": os.Getenv("PAYMENT_SERVICE_ADDRESS"),
+	}
+
 	chatBotData := map[string]string{
 		"SERVICE_ID":   os.Getenv("CHATBOT_SERVICE_ID"),
 		"SERVICE_NAME": os.Getenv("CHATBOT_SERVICE_NAME"),
 		"SERVICE_PORT": os.Getenv("CHATBOT_SERVICE_PORT"),
 		"SERVICE_PATH": os.Getenv("CHATBOT_SERVICE_ADDRESS"),
 		"KEY":          os.Getenv("CHATBOT_KEY"),
+	}
+
+	fileMakerData := map[string]string{
+		"SERVICE_ID":   os.Getenv("FILEMAKER_SERVICE_ID"),
+		"SERVICE_NAME": os.Getenv("FILEMAKER_SERVICE_NAME"),
+		"SERVICE_PORT": os.Getenv("FILEMAKER_SERVICE_PORT"),
+		"SERVICE_PATH": os.Getenv("FILEMAKER_SERVICE_ADDRESS"),
 	}
 
 	redisLocalData := map[string]string{
@@ -102,6 +116,7 @@ func RegisterConstants(consulClient *api.Client) {
 		"MAX_LIFETIME_CONN": os.Getenv("MAX_LIFETIME_CONN_LOCAL"),
 		"DB_NAME_SECURITY":  os.Getenv("DB_NAME_SECURITY_LOCAL"),
 		"DB_NAME_SERVICE":   os.Getenv("DB_NAME_SERVICE_LOCAL"),
+		"DB_NAME_PAYMENT":   os.Getenv("DB_NAME_PAYMENT_LOCAL"),
 	}
 
 	rabbitmqData := map[string]string{
@@ -109,6 +124,14 @@ func RegisterConstants(consulClient *api.Client) {
 		"RABBIT_PORT":     os.Getenv("RABBIT_PORT"),
 		"RABBIT_USER":     os.Getenv("RABBIT_USER"),
 		"RABBIT_PASSWORD": os.Getenv("RABBIT_PASSWORD"),
+		"RABBIT_SERVICES": os.Getenv("RABBIT_SERVICES"),
+	}
+
+	minioData := map[string]string{
+		"MINIO_HOST":   os.Getenv("MINIO_HOST"),
+		"MINIO_PORT":   os.Getenv("MINIO_PORT"),
+		"MINIO_SECRET": os.Getenv("MINIO_SECRET"),
+		"MINIO_ACCESS": os.Getenv("MINIO_ACCESS"),
 	}
 
 	consul.StoreKeyValue(consulClient, "SERVICE_CACHE", os.Getenv("SERVICE_CACHE"))
@@ -118,10 +141,14 @@ func RegisterConstants(consulClient *api.Client) {
 	consul.StoreKeyValue(consulClient, "CACHE", handleJson(cacheData))
 	consul.StoreKeyValue(consulClient, "TRAZA", handleJson(trazaData))
 	consul.StoreKeyValue(consulClient, "SERVICE", handleJson(ServiceData))
+	consul.StoreKeyValue(consulClient, "PAYMENT", handleJson(PaymentData))
 	consul.StoreKeyValue(consulClient, "SECURITY", handleJson(securityData))
 	consul.StoreKeyValue(consulClient, "DB_LOCAL", handleJson(dbLocalData))
 	consul.StoreKeyValue(consulClient, "RABBIT", handleJson(rabbitmqData))
 	consul.StoreKeyValue(consulClient, "REDIS_LOCAL", handleJson(redisLocalData))
 	consul.StoreKeyValue(consulClient, "REDIS", handleJson(redisData))
 	consul.StoreKeyValue(consulClient, "CHATBOT", handleJson(chatBotData))
+	consul.StoreKeyValue(consulClient, "MINIO", handleJson(minioData))
+	consul.StoreKeyValue(consulClient, "FILEMAKER", handleJson(fileMakerData))
+
 }
