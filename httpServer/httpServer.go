@@ -7,7 +7,6 @@ import (
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"os"
-	"time"
 )
 
 func InitHttpServer(taskQueue chan *http.Request) {
@@ -24,7 +23,7 @@ func InitHttpServer(taskQueue chan *http.Request) {
 		fmt.Sprintf("%s/*path", os.Getenv("SERVICE_PATH")),
 		func(c *gin.Context) {
 			//taskQueue <- c.Request
-			time.Sleep(time.Second)
+			//time.Sleep(time.Second)
 			redirectgetway.Redirectgetway(c)
 		})
 
