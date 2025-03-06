@@ -85,6 +85,13 @@ func RegisterConstants(consulClient *api.Client) {
 		"SERVICE_PATH": os.Getenv("FILEMAKER_SERVICE_ADDRESS"),
 	}
 
+	fileUploaderData := map[string]string{
+		"SERVICE_ID":   os.Getenv("FILEUPLOADER_SERVICE_ID"),
+		"SERVICE_NAME": os.Getenv("FILEUPLOADER_SERVICE_NAME"),
+		"SERVICE_PORT": os.Getenv("FILEUPLOADER_SERVICE_PORT"),
+		"SERVICE_PATH": os.Getenv("FILEUPLOADER_SERVICE_ADDRESS"),
+	}
+
 	redisLocalData := map[string]string{
 		"REDIS_ADDRESS":  os.Getenv("REDIS_ADDRESS_LOCAL"),
 		"REDIS_PORT":     os.Getenv("REDIS_PORT_LOCAL"),
@@ -150,5 +157,6 @@ func RegisterConstants(consulClient *api.Client) {
 	consul.StoreKeyValue(consulClient, "CHATBOT", handleJson(chatBotData))
 	consul.StoreKeyValue(consulClient, "MINIO", handleJson(minioData))
 	consul.StoreKeyValue(consulClient, "FILEMAKER", handleJson(fileMakerData))
+	consul.StoreKeyValue(consulClient, "FILEUPLOADER", handleJson(fileUploaderData))
 
 }
