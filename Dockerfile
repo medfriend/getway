@@ -14,7 +14,7 @@ RUN go mod download
 COPY . .
 
 # ✅ Copiar el archivo .env a la misma ubicación donde está main.go
-COPY .env /app/.env
+COPY .env.devprod /app/.env
 
 # Build the Go app
 RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o myapp

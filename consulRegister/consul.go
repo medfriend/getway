@@ -70,6 +70,13 @@ func RegisterConstants(consulClient *api.Client) {
 		"SERVICE_PATH": os.Getenv("PAYMENT_SERVICE_ADDRESS"),
 	}
 
+	LaywerData := map[string]string{
+		"SERVICE_ID":   os.Getenv("LAWYER_SERVICE_ID"),
+		"SERVICE_NAME": os.Getenv("LAWYER_SERVICE_NAME"),
+		"SERVICE_PORT": os.Getenv("LAWYER_SERVICE_PORT"),
+		"SERVICE_PATH": os.Getenv("LAWYER_SERVICE_ADDRESS"),
+	}
+
 	chatBotData := map[string]string{
 		"SERVICE_ID":   os.Getenv("CHATBOT_SERVICE_ID"),
 		"SERVICE_NAME": os.Getenv("CHATBOT_SERVICE_NAME"),
@@ -90,6 +97,15 @@ func RegisterConstants(consulClient *api.Client) {
 		"SERVICE_NAME": os.Getenv("FILEUPLOADER_SERVICE_NAME"),
 		"SERVICE_PORT": os.Getenv("FILEUPLOADER_SERVICE_PORT"),
 		"SERVICE_PATH": os.Getenv("FILEUPLOADER_SERVICE_ADDRESS"),
+	}
+
+	gmailSenderData := map[string]string{
+		"SERVICE_ID":   os.Getenv("GMAILSENDER_SERVICE_ID"),
+		"SERVICE_NAME": os.Getenv("GMAILSENDER_SERVICE_NAME"),
+		"SERVICE_PORT": os.Getenv("GMAILSENDER_SERVICE_PORT"),
+		"SERVICE_PATH": os.Getenv("GMAILSENDER_SERVICE_ADDRESS"),
+		"MAIL":         os.Getenv("GMAILSENDER_MAIL"),
+		"PASS":         os.Getenv("GMAILSENDER_PASS"),
 	}
 
 	redisLocalData := map[string]string{
@@ -124,6 +140,7 @@ func RegisterConstants(consulClient *api.Client) {
 		"DB_NAME_SECURITY":  os.Getenv("DB_NAME_SECURITY_LOCAL"),
 		"DB_NAME_SERVICE":   os.Getenv("DB_NAME_SERVICE_LOCAL"),
 		"DB_NAME_PAYMENT":   os.Getenv("DB_NAME_PAYMENT_LOCAL"),
+		"DB_NAME_LAW":       os.Getenv("DB_NAME_LAW_LOCAL"),
 	}
 
 	rabbitmqData := map[string]string{
@@ -147,16 +164,20 @@ func RegisterConstants(consulClient *api.Client) {
 	consul.StoreKeyValue(consulClient, "DB", handleJson(dbData))
 	consul.StoreKeyValue(consulClient, "CACHE", handleJson(cacheData))
 	consul.StoreKeyValue(consulClient, "TRAZA", handleJson(trazaData))
+
 	consul.StoreKeyValue(consulClient, "SERVICE", handleJson(ServiceData))
 	consul.StoreKeyValue(consulClient, "PAYMENT", handleJson(PaymentData))
 	consul.StoreKeyValue(consulClient, "SECURITY", handleJson(securityData))
+	consul.StoreKeyValue(consulClient, "LAW", handleJson(LaywerData))
+
 	consul.StoreKeyValue(consulClient, "DB_LOCAL", handleJson(dbLocalData))
 	consul.StoreKeyValue(consulClient, "RABBIT", handleJson(rabbitmqData))
 	consul.StoreKeyValue(consulClient, "REDIS_LOCAL", handleJson(redisLocalData))
 	consul.StoreKeyValue(consulClient, "REDIS", handleJson(redisData))
-	consul.StoreKeyValue(consulClient, "CHATBOT", handleJson(chatBotData))
 	consul.StoreKeyValue(consulClient, "MINIO", handleJson(minioData))
+
+	consul.StoreKeyValue(consulClient, "CHATBOT", handleJson(chatBotData))
 	consul.StoreKeyValue(consulClient, "FILEMAKER", handleJson(fileMakerData))
 	consul.StoreKeyValue(consulClient, "FILEUPLOADER", handleJson(fileUploaderData))
-
+	consul.StoreKeyValue(consulClient, "GMAILSENDER", handleJson(gmailSenderData))
 }
