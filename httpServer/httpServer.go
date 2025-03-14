@@ -5,11 +5,12 @@ import (
 	"getway-go/httpServer/middleware"
 	"getway-go/httpServer/redirectgetway"
 	"github.com/gin-gonic/gin"
+	"github.com/hashicorp/consul/api"
 	"net/http"
 	"os"
 )
 
-func InitHttpServer(taskQueue chan *http.Request) {
+func InitHttpServer(taskQueue chan *http.Request, consulCLient *api.Client) {
 	r := gin.Default()
 
 	whitelist := []string{
@@ -24,7 +25,7 @@ func InitHttpServer(taskQueue chan *http.Request) {
 		func(c *gin.Context) {
 			//taskQueue <- c.Request
 			//time.Sleep(time.Second)
-			redirectgetway.Redirectgetway(c)
+			redirectgetway.Redirectgetway(c, consulCLient)
 		})
 
 	err := r.Run(fmt.Sprintf(":%s", os.Getenv("SERVICE_PORT")))

@@ -44,7 +44,7 @@ func main() {
 
 	worker.CreateWorkers(numCPUs, stop, taskQueue)
 
-	go httpServer.InitHttpServer(taskQueue)
+	go httpServer.InitHttpServer(taskQueue, consulClient)
 
 	worker.HandleShutdown(stop, consulClient)
 }

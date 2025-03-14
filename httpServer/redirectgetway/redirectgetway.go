@@ -4,21 +4,22 @@ import (
 	"fmt"
 	"getway-go/httpServer/service"
 	"github.com/gin-gonic/gin"
+	"github.com/hashicorp/consul/api"
 	"github.com/medfriend/shared-commons-go/util/consul"
 	"os"
 	"strings"
 )
 
-func Redirectgetway(c *gin.Context) {
+func Redirectgetway(c *gin.Context, consulClient *api.Client) {
 
 	ignoreCache := c.Request.Header.Get("ignore-cache")
 
 	cacheServiceName := os.Getenv("SERVICE_CACHE")
 
-	address, port, err := consul.GetServiceAddressAndPort(cacheServiceName)
+	address, port, err := consul.GetServiceAddressAndPort(consulClient, cacheServiceName)
 
 	if ignoreCache == "Y" {
-		registerOnService(c, address, port, cacheServiceName)
+		registerOnService(c, address, port, cacheServiceName, consulClient)
 		return
 	}
 
@@ -34,26 +35,27 @@ func Redirectgetway(c *gin.Context) {
 		}
 
 		if errCache != nil || body["data"] == "data no avalible on the cache" {
-			registerOnService(c, address, port, cacheServiceName)
+			registerOnService(c, address, port, cacheServiceName, consulClient)
 		}
 	}
 
 }
 
-func registerOnService(c *gin.Context, address string, port int, cacheServiceName string) {
+func registerOnService(c *gin.Context, address string, port int, cacheServiceName string, consulClient *api.Client) {
 
 	ignoreCache := c.Request.Header.Get("ignore-cache")
 	pathParts := strings.Split(c.Request.URL.Path, "/")
 	serviceName := fmt.Sprintf("medfri-%s", strings.Join(pathParts[2:3], "/"))
-	_, portService, err := consul.GetServiceAddressAndPort(serviceName)
+	address, portService, err := consul.GetServiceAddressAndPort(consulClient, serviceName)
 
 	if err != nil {
+		fmt.Println(err)
 		fmt.Println(fmt.Sprintf("%s no se encuentra en consulRegister", serviceName))
 	}
 
 	// TODO validar el addressService de consul
 	body, err, serviceStatusCode := service.GetServiceResponse(c,
-		"localhost",
+		address,
 		portService,
 		serviceName,
 		c.Request.Method,
