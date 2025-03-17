@@ -1,16 +1,20 @@
 package redirectgetway
 
 import (
+	"encoding/json"
 	"fmt"
 	"getway-go/httpServer/service"
+	"getway-go/jwt"
 	"github.com/gin-gonic/gin"
 	"github.com/hashicorp/consul/api"
 	"github.com/medfriend/shared-commons-go/util/consul"
 	"os"
+	"strconv"
 	"strings"
+	"time"
 )
 
-func Redirectgetway(c *gin.Context, consulClient *api.Client) {
+func Redirectgetway(c *gin.Context, consulClient *api.Client, start time.Time) {
 
 	ignoreCache := c.Request.Header.Get("ignore-cache")
 
@@ -19,7 +23,7 @@ func Redirectgetway(c *gin.Context, consulClient *api.Client) {
 	address, port, err := consul.GetServiceAddressAndPort(consulClient, cacheServiceName)
 
 	if ignoreCache == "Y" {
-		registerOnService(c, address, port, cacheServiceName, consulClient)
+		registerOnService(c, address, port, cacheServiceName, consulClient, start)
 		return
 	}
 
@@ -34,13 +38,13 @@ func Redirectgetway(c *gin.Context, consulClient *api.Client) {
 		}
 
 		if errCache != nil || body["data"] == "data no avalible on the cache" {
-			registerOnService(c, address, port, cacheServiceName, consulClient)
+			registerOnService(c, address, port, cacheServiceName, consulClient, start)
 		}
 	}
 
 }
 
-func registerOnService(c *gin.Context, address string, port int, cacheServiceName string, consulClient *api.Client) {
+func registerOnService(c *gin.Context, address string, port int, cacheServiceName string, consulClient *api.Client, start time.Time) {
 
 	ignoreCache := c.Request.Header.Get("ignore-cache")
 	pathParts := strings.Split(c.Request.URL.Path, "/")
@@ -76,13 +80,36 @@ func registerOnService(c *gin.Context, address string, port int, cacheServiceNam
 		respuesta := body["data"]
 		microservicio := fullUrl[2]
 		coleccion := fullUrl[3]
-		endpoint := strings.Join(fullUrl[4:], "")
+		endpoint := c.Request.URL.String()
+		accion := fullUrl[4]
+		ip := c.GetHeader("X-Real-IP")
+		token := c.GetHeader("Authorization")
+		duracion := time.Since(start)
+		respuestaJson, err := json.Marshal(respuesta)
 
+		var usuario string
+
+		if token == "" {
+			usuario = c.GetHeader("usuario")
+		} else {
+			decodeToken, _ := jwt.DecodeJWT(token)
+			usuario = strconv.Itoa(decodeToken.User.Usuario)
+		}
+
+		fmt.Println(token)
 		fmt.Println("estado: ", estado)
-		fmt.Println("respuesta: ", respuesta)
+		fmt.Println("respuesta: ", respuestaJson)
 		fmt.Println("microservicio: ", microservicio)
 		fmt.Println("colection: ", coleccion)
 		fmt.Println("endpoint: ", endpoint)
+		fmt.Println("accion: ", accion)
+		fmt.Println("error: ", body["error"])
+		fmt.Println("ip: ", ip)
+		fmt.Println("duracion: ", duracion)
+		fmt.Println(body["collectio_id"])
+		fmt.Println("token: ", usuario)
+
+		fmt.Println("err: ", err)
 
 		c.JSON(*serviceStatusCode, body)
 		c.Abort()

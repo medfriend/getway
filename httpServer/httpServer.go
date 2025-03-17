@@ -8,6 +8,7 @@ import (
 	"github.com/hashicorp/consul/api"
 	"net/http"
 	"os"
+	"time"
 )
 
 func InitHttpServer(taskQueue chan *http.Request, consulCLient *api.Client) {
@@ -24,7 +25,8 @@ func InitHttpServer(taskQueue chan *http.Request, consulCLient *api.Client) {
 		fmt.Sprintf("%s/*path", os.Getenv("SERVICE_PATH")),
 		func(c *gin.Context) {
 			//taskQueue <- c.Request
-			redirectgetway.Redirectgetway(c, consulCLient)
+			start := time.Now()
+			redirectgetway.Redirectgetway(c, consulCLient, start)
 		})
 
 	err := r.Run(fmt.Sprintf(":%s", os.Getenv("SERVICE_PORT")))
