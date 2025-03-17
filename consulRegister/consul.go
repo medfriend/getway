@@ -101,12 +101,13 @@ func RegisterConstants(consulClient *api.Client) {
 	}
 
 	gmailSenderData := map[string]string{
-		"SERVICE_ID":   os.Getenv("GMAILSENDER_SERVICE_ID"),
-		"SERVICE_NAME": os.Getenv("GMAILSENDER_SERVICE_NAME"),
-		"SERVICE_PORT": os.Getenv("GMAILSENDER_SERVICE_PORT"),
-		"SERVICE_PATH": os.Getenv("GMAILSENDER_SERVICE_ADDRESS"),
-		"MAIL":         os.Getenv("GMAILSENDER_MAIL"),
-		"PASS":         os.Getenv("GMAILSENDER_PASS"),
+		"SERVICE_ID":      os.Getenv("GMAILSENDER_SERVICE_ID"),
+		"SERVICE_NAME":    os.Getenv("GMAILSENDER_SERVICE_NAME"),
+		"SERVICE_PORT":    os.Getenv("GMAILSENDER_SERVICE_PORT"),
+		"SERVICE_PATH":    os.Getenv("GMAILSENDER_SERVICE_ADDRESS"),
+		"SERVICE_ADDRESS": os.Getenv("GMAILSENDER_SERVICE_ADDRESS"),
+		"MAIL":            os.Getenv("GMAILSENDER_MAIL"),
+		"PASS":            os.Getenv("GMAILSENDER_PASS"),
 	}
 
 	redisLocalData := map[string]string{

@@ -14,7 +14,7 @@ func InitHttpServer(taskQueue chan *http.Request, consulCLient *api.Client) {
 	r := gin.Default()
 
 	whitelist := []string{
-		"/medfri-getway/security/auth",
+		"/medfri-getway/security/auth/login",
 	}
 
 	r.Use(middleware.Corsmiddleware())
@@ -24,7 +24,6 @@ func InitHttpServer(taskQueue chan *http.Request, consulCLient *api.Client) {
 		fmt.Sprintf("%s/*path", os.Getenv("SERVICE_PATH")),
 		func(c *gin.Context) {
 			//taskQueue <- c.Request
-			//time.Sleep(time.Second)
 			redirectgetway.Redirectgetway(c, consulCLient)
 		})
 

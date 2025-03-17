@@ -48,18 +48,16 @@ func registerOnService(c *gin.Context, address string, port int, cacheServiceNam
 	address, portService, err := consul.GetServiceAddressAndPort(consulClient, serviceName)
 
 	if err != nil {
-		fmt.Println(err)
 		fmt.Println(fmt.Sprintf("%s no se encuentra en consulRegister", serviceName))
 	}
 
-	// TODO validar el addressService de consul
 	body, err, serviceStatusCode := service.GetServiceResponse(c,
 		address,
 		portService,
 		serviceName,
 		c.Request.Method,
 		false)
-	
+
 	if len(body) == 0 {
 		c.JSON(404, gin.H{"error": "api no encontrada"})
 		c.Abort()
@@ -71,6 +69,20 @@ func registerOnService(c *gin.Context, address string, port int, cacheServiceNam
 		if body["error"] == nil && ignoreCache != "Y" {
 			service.PostServiceResponse(c, address, port, cacheServiceName, "POST", true, body)
 		}
+
+		fullUrl := strings.Split(c.Request.URL.String(), "/")
+
+		estado := *serviceStatusCode
+		respuesta := body["data"]
+		microservicio := fullUrl[2]
+		coleccion := fullUrl[3]
+		endpoint := strings.Join(fullUrl[4:], "")
+
+		fmt.Println("estado: ", estado)
+		fmt.Println("respuesta: ", respuesta)
+		fmt.Println("microservicio: ", microservicio)
+		fmt.Println("colection: ", coleccion)
+		fmt.Println("endpoint: ", endpoint)
 
 		c.JSON(*serviceStatusCode, body)
 		c.Abort()
