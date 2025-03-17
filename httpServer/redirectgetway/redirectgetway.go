@@ -25,8 +25,7 @@ func Redirectgetway(c *gin.Context, consulClient *api.Client) {
 
 	if err == nil {
 
-		// TODO validar el valor de localhost y el address que devuelve consul
-		body, errCache, cacheStatusCode := service.GetServiceResponse(c, "localhost", port, cacheServiceName, "GET", true)
+		body, errCache, cacheStatusCode := service.GetServiceResponse(c, address, port, cacheServiceName, "GET", true)
 
 		if body["data"] != "data no avalible on the cache" {
 			c.JSON(*cacheStatusCode, body)
@@ -60,7 +59,7 @@ func registerOnService(c *gin.Context, address string, port int, cacheServiceNam
 		serviceName,
 		c.Request.Method,
 		false)
-
+	
 	if len(body) == 0 {
 		c.JSON(404, gin.H{"error": "api no encontrada"})
 		c.Abort()

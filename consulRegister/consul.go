@@ -57,10 +57,11 @@ func RegisterConstants(consulClient *api.Client) {
 	}
 
 	ServiceData := map[string]string{
-		"SERVICE_ID":   os.Getenv("SERVICE_SERVICE_ID"),
-		"SERVICE_NAME": os.Getenv("SERVICE_SERVICE_NAME"),
-		"SERVICE_PORT": os.Getenv("SERVICE_SERVICE_PORT"),
-		"SERVICE_PATH": os.Getenv("SERVICE_SERVICE_ADDRESS"),
+		"SERVICE_ID":      os.Getenv("SERVICE_SERVICE_ID"),
+		"SERVICE_NAME":    os.Getenv("SERVICE_SERVICE_NAME"),
+		"SERVICE_PORT":    os.Getenv("SERVICE_SERVICE_PORT"),
+		"SERVICE_PATH":    os.Getenv("SERVICE_SERVICE_ADDRESS"),
+		"SERVICE_ADDRESS": os.Getenv("SERVICE_SERVICE_ADDRESS"),
 	}
 
 	PaymentData := map[string]string{
