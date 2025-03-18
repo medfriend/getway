@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"getway-go/consulRegister"
 	"getway-go/httpServer"
+	"getway-go/util"
 	"github.com/medfriend/shared-commons-go/util/consul"
 	"github.com/medfriend/shared-commons-go/util/env"
 	"github.com/medfriend/shared-commons-go/util/worker"
@@ -33,6 +34,8 @@ func main() {
 	consulClient := consul.ConnectToConsul(consulAddress)
 
 	consulRegister.RegisterConstants(consulClient)
+
+	util.ConnectRabbit(consulClient)
 
 	numCPUs := runtime.NumCPU()
 

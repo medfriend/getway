@@ -9,6 +9,8 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/hashicorp/consul/api"
 	"github.com/medfriend/shared-commons-go/util/consul"
+	"github.com/medfriend/shared-commons-go/util/global"
+	"github.com/medfriend/shared-commons-go/util/rabbitmq"
 	"os"
 	"strconv"
 	"strings"
@@ -114,7 +116,19 @@ func registerOnService(c *gin.Context, address string, port int, cacheServiceNam
 			Microservicio: fullUrl[2],
 		}
 
-		fmt.Println("trazaMessage: ", trazaMessage)
+		trazaMessageJson, err := json.Marshal(trazaMessage)
+
+		if err != nil {
+			fmt.Errorf("error al marshal el trazamessage")
+		}
+		fmt.Println(global.GetRabbitConn())
+		rabbit := rabbitmq.GetInstance(global.GetRabbitConn())
+
+		rabbit.SendMessage(
+			"trazaacciones",
+			string(trazaMessageJson),
+			global.GetRabbitConn(),
+		)
 
 		c.JSON(*serviceStatusCode, body)
 		c.Abort()
