@@ -110,6 +110,13 @@ func RegisterConstants(consulClient *api.Client) {
 		"PASS":            os.Getenv("GMAILSENDER_PASS"),
 	}
 
+	trazaaccionesData := map[string]string{
+		"SERVICE_ID":   os.Getenv("TRAZAACCIONES_SERVICE_ID"),
+		"SERVICE_NAME": os.Getenv("TRAZAACCIONES_SERVICE_NAME"),
+		"SERVICE_PORT": os.Getenv("TRAZAACCIONES_SERVICE_PORT"),
+		"SERVICE_PATH": os.Getenv("TRAZAACCIONES_SERVICE_ADDRESS"),
+	}
+
 	redisLocalData := map[string]string{
 		"REDIS_ADDRESS":  os.Getenv("REDIS_ADDRESS_LOCAL"),
 		"REDIS_PORT":     os.Getenv("REDIS_PORT_LOCAL"),
@@ -182,4 +189,5 @@ func RegisterConstants(consulClient *api.Client) {
 	consul.StoreKeyValue(consulClient, "FILEMAKER", handleJson(fileMakerData))
 	consul.StoreKeyValue(consulClient, "FILEUPLOADER", handleJson(fileUploaderData))
 	consul.StoreKeyValue(consulClient, "GMAILSENDER", handleJson(gmailSenderData))
+	consul.StoreKeyValue(consulClient, "TRAZAACCIONES", handleJson(trazaaccionesData))
 }

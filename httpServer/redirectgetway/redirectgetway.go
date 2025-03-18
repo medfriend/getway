@@ -3,6 +3,7 @@ package redirectgetway
 import (
 	"encoding/json"
 	"fmt"
+	"getway-go/dto"
 	"getway-go/httpServer/service"
 	"getway-go/jwt"
 	"github.com/gin-gonic/gin"
@@ -76,16 +77,12 @@ func registerOnService(c *gin.Context, address string, port int, cacheServiceNam
 
 		fullUrl := strings.Split(c.Request.URL.String(), "/")
 
-		estado := *serviceStatusCode
-		respuesta := body["data"]
-		microservicio := fullUrl[2]
-		coleccion := fullUrl[3]
-		endpoint := c.Request.URL.String()
-		accion := fullUrl[4]
-		ip := c.GetHeader("X-Real-IP")
 		token := c.GetHeader("Authorization")
-		duracion := time.Since(start)
-		respuestaJson, err := json.Marshal(respuesta)
+		respuestaJson, err := json.Marshal(body["data"])
+
+		if err != nil {
+			fmt.Errorf("error al parsear json de la respuesta del microservicio")
+		}
 
 		var usuario string
 
@@ -96,20 +93,28 @@ func registerOnService(c *gin.Context, address string, port int, cacheServiceNam
 			usuario = strconv.Itoa(decodeToken.User.Usuario)
 		}
 
-		fmt.Println(token)
-		fmt.Println("estado: ", estado)
-		fmt.Println("respuesta: ", respuestaJson)
-		fmt.Println("microservicio: ", microservicio)
-		fmt.Println("colection: ", coleccion)
-		fmt.Println("endpoint: ", endpoint)
-		fmt.Println("accion: ", accion)
-		fmt.Println("error: ", body["error"])
-		fmt.Println("ip: ", ip)
-		fmt.Println("duracion: ", duracion)
-		fmt.Println(body["collectio_id"])
-		fmt.Println("token: ", usuario)
+		var errorString string
 
-		fmt.Println("err: ", err)
+		if body["error"] == nil {
+			errorString = "no error"
+		} else {
+			errorString = body["error"].(string)
+		}
+
+		trazaMessage := dto.TrazaDTO{
+			UsuarioID:     usuario,
+			Accion:        fullUrl[4],
+			Estado:        *serviceStatusCode,
+			Endpoint:      c.Request.URL.String(),
+			Payload:       string(respuestaJson),
+			Ip:            c.ClientIP(),
+			Duracion:      time.Since(start).String(),
+			Error:         errorString,
+			Coleccion:     fullUrl[3],
+			Microservicio: fullUrl[2],
+		}
+
+		fmt.Println("trazaMessage: ", trazaMessage)
 
 		c.JSON(*serviceStatusCode, body)
 		c.Abort()
