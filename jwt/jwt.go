@@ -10,7 +10,8 @@ import (
 
 type Claims struct {
 	User struct {
-		Usuario int `json:"usuario"`
+		Usuario   int `json:"usuario"`
+		UsuarioID int `json:"usuario_id"`
 	} `json:"user"`
 	jwt.StandardClaims
 }

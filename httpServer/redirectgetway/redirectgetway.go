@@ -89,10 +89,11 @@ func registerOnService(c *gin.Context, address string, port int, cacheServiceNam
 		var usuario string
 
 		if token == "" {
-			usuario = c.GetHeader("usuario")
+			decodeToken, _ := jwt.DecodeJWT("Bearer " + body["data"].(string))
+			usuario = strconv.Itoa(decodeToken.User.UsuarioID)
 		} else {
 			decodeToken, _ := jwt.DecodeJWT(token)
-			usuario = strconv.Itoa(decodeToken.User.Usuario)
+			usuario = strconv.Itoa(decodeToken.User.UsuarioID)
 		}
 
 		var errorString string
@@ -102,6 +103,8 @@ func registerOnService(c *gin.Context, address string, port int, cacheServiceNam
 		} else {
 			errorString = body["error"].(string)
 		}
+
+		collection_id, err := json.Marshal(body["collectio_id"])
 
 		trazaMessage := dto.TrazaDTO{
 			UsuarioID:     usuario,
@@ -114,6 +117,7 @@ func registerOnService(c *gin.Context, address string, port int, cacheServiceNam
 			Error:         errorString,
 			Coleccion:     fullUrl[3],
 			Microservicio: fullUrl[2],
+			CollectionId:  string(collection_id),
 		}
 
 		trazaMessageJson, err := json.Marshal(trazaMessage)

@@ -11,4 +11,5 @@ type TrazaDTO struct {
 	Duracion      string `json:"duracion"`
 	Coleccion     string `json:"coleccion"`
 	Microservicio string `json:"microservicio"`
+	CollectionId  string `json:"collection_id"`
 }
