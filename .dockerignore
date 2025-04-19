@@ -1,0 +1,49 @@
+# Version control
+.git
+.gitignore
+.github
+.scannerwork
+
+# Go build files
+/bin
+/vendor
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.test
+*.out
+.golangci.yml
+
+# Development environment
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Local environment files (except the one you need for the Docker build)
+.env
+
+# Logs
+*.log
+
+# OS specific files
+.DS_Store
+Thumbs.db
+
+# Documentation
+/docs
+README.md
+CHANGELOG.md
+LICENSE
+
+# Tests
+*_test.go
+/test
+/tests
+
+# Other unnecessary files
+/examples
+/deploy
+/scripts

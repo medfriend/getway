@@ -88,19 +88,18 @@ func registerOnService(c *gin.Context, address string, port int, cacheServiceNam
 
 		var usuario string
 
+		tokenToUse := token
+
 		if token == "" {
-			decodeToken, _ := jwt.DecodeJWT("Bearer " + body["data"].(string))
-			usuario = strconv.Itoa(decodeToken.User.UsuarioID)
-		} else {
-			decodeToken, _ := jwt.DecodeJWT(token)
-			usuario = strconv.Itoa(decodeToken.User.UsuarioID)
+			tokenToUse = "Bearer " + body["data"].(string)
 		}
 
-		var errorString string
+		decodeToken, _ := jwt.DecodeJWT(tokenToUse)
+		usuario = strconv.Itoa(decodeToken.User.UsuarioID)
 
-		if body["error"] == nil {
-			errorString = "no error"
-		} else {
+		errorString := "no error"
+
+		if body["error"] != nil {
 			errorString = body["error"].(string)
 		}
 

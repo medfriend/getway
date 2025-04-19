@@ -94,6 +94,13 @@ func RegisterConstants(consulClient *api.Client) {
 		"SERVICE_PATH": os.Getenv("FILEMAKER_SERVICE_ADDRESS"),
 	}
 
+	fileConverterData := map[string]string{
+		"SERVICE_ID":   os.Getenv("FILECONVERTER_SERVICE_ID"),
+		"SERVICE_NAME": os.Getenv("FILECONVERTER_SERVICE_NAME"),
+		"SERVICE_PORT": os.Getenv("FILECONVERTER_SERVICE_PORT"),
+		"SERVICE_PATH": os.Getenv("FILECONVERTER_SERVICE_ADDRESS"),
+	}
+
 	fileUploaderData := map[string]string{
 		"SERVICE_ID":   os.Getenv("FILEUPLOADER_SERVICE_ID"),
 		"SERVICE_NAME": os.Getenv("FILEUPLOADER_SERVICE_NAME"),
@@ -189,6 +196,7 @@ func RegisterConstants(consulClient *api.Client) {
 	consul.StoreKeyValue(consulClient, "CHATBOT", handleJson(chatBotData))
 	consul.StoreKeyValue(consulClient, "FILEMAKER", handleJson(fileMakerData))
 	consul.StoreKeyValue(consulClient, "FILEUPLOADER", handleJson(fileUploaderData))
+	consul.StoreKeyValue(consulClient, "FILECONVERTER", handleJson(fileConverterData))
 	consul.StoreKeyValue(consulClient, "GMAILSENDER", handleJson(gmailSenderData))
 	consul.StoreKeyValue(consulClient, "TRAZAACCIONES", handleJson(trazaaccionesData))
 }
