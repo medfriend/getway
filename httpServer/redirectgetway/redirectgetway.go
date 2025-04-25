@@ -105,33 +105,37 @@ func registerOnService(c *gin.Context, address string, port int, cacheServiceNam
 
 		collection_id, err := json.Marshal(body["collectio_id"])
 
-		trazaMessage := dto.TrazaDTO{
-			UsuarioID:     usuario,
-			Accion:        fullUrl[4],
-			Estado:        *serviceStatusCode,
-			Endpoint:      c.Request.URL.String(),
-			Payload:       string(respuestaJson),
-			Ip:            c.ClientIP(),
-			Duracion:      time.Since(start).String(),
-			Error:         errorString,
-			Coleccion:     fullUrl[3],
-			Microservicio: fullUrl[2],
-			CollectionId:  string(collection_id),
+		NoApplyEndPoint := "/medfri-getway/security/trazabilidadUsuarioAccion/GetTrazaByUserId"
+
+		if strings.Contains(c.Request.URL.String(), NoApplyEndPoint) == false {
+			trazaMessage := dto.TrazaDTO{
+				UsuarioID:     usuario,
+				Accion:        fullUrl[4],
+				Estado:        *serviceStatusCode,
+				Endpoint:      c.Request.URL.String(),
+				Payload:       string(respuestaJson),
+				Ip:            c.ClientIP(),
+				Duracion:      time.Since(start).String(),
+				Error:         errorString,
+				Coleccion:     fullUrl[3],
+				Microservicio: fullUrl[2],
+				CollectionId:  string(collection_id),
+			}
+
+			trazaMessageJson, err := json.Marshal(trazaMessage)
+
+			if err != nil {
+				fmt.Errorf("error al marshal el trazamessage")
+			}
+			fmt.Println(global.GetRabbitConn())
+			rabbit := rabbitmq.GetInstance(global.GetRabbitConn())
+
+			rabbit.SendMessage(
+				"trazaacciones",
+				string(trazaMessageJson),
+				global.GetRabbitConn(),
+			)
 		}
-
-		trazaMessageJson, err := json.Marshal(trazaMessage)
-
-		if err != nil {
-			fmt.Errorf("error al marshal el trazamessage")
-		}
-		fmt.Println(global.GetRabbitConn())
-		rabbit := rabbitmq.GetInstance(global.GetRabbitConn())
-
-		rabbit.SendMessage(
-			"trazaacciones",
-			string(trazaMessageJson),
-			global.GetRabbitConn(),
-		)
 
 		c.JSON(*serviceStatusCode, body)
 		c.Abort()
