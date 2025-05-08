@@ -46,7 +46,7 @@ func RegisterConstants(consulClient *api.Client) {
 		"REDIS_ADDRESS":   os.Getenv("REDIS_ADDRESS"),
 		"REDIS_PORT":      os.Getenv("REDIS_PORT"),
 		"REDIS_PASSWORD":  os.Getenv("REDIS_PASSWORD"),
-		"SERVICE_ADDRESS": os.Getenv("SERVICE_ADDRESS"),
+		"SERVICE_ADDRESS": os.Getenv("CACHE_SERVICE_ADDRESS"),
 	}
 
 	trazaData := map[string]string{
@@ -76,7 +76,7 @@ func RegisterConstants(consulClient *api.Client) {
 		"SERVICE_NAME":    os.Getenv("LAWYER_SERVICE_NAME"),
 		"SERVICE_PORT":    os.Getenv("LAWYER_SERVICE_PORT"),
 		"SERVICE_PATH":    os.Getenv("LAWYER_SERVICE_ADDRESS"),
-		"SERVICE_ADDRESS": os.Getenv("SERVICE_SERVICE_ADDRESS"),
+		"SERVICE_ADDRESS": os.Getenv("LAWYER_SERVICE_ADDRESS"),
 	}
 
 	chatBotData := map[string]string{

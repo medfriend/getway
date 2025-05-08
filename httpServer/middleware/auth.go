@@ -1,6 +1,7 @@
 package middleware
 
 import (
+	"fmt"
 	"getway-go/jwt"
 	"github.com/gin-gonic/gin"
 	"net/http"
@@ -8,6 +9,8 @@ import (
 
 func Authmiddleware(whitelist []string) gin.HandlerFunc {
 	return func(c *gin.Context) {
+
+		fmt.Println(c.Request.URL.Path)
 
 		for _, path := range whitelist {
 			if path == c.Request.URL.Path {
