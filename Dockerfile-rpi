@@ -1,0 +1,54 @@
+# Etapa 1: Build del binario para ARM64
+FROM golang:1.23.3 AS builder
+
+# Directorio de trabajo dentro del contenedor
+WORKDIR /app
+
+# Copiar los archivos de dependencias
+COPY go.mod go.sum ./
+RUN go mod download
+
+# Copiar el código fuente y archivos necesarios
+COPY *.go ./
+COPY dto/ ./dto/
+COPY consulRegister/ ./consulRegister/
+COPY httpServer/ ./httpServer/
+COPY jwt/ ./jwt/
+COPY util/ ./util/
+
+# Copiar el archivo de configuración
+COPY .env.devprod /app/.env
+
+# Compilar el binario para Linux ARM64 (Raspberry Pi)
+RUN CGO_ENABLED=0 GOOS=linux GOARCH=arm64 go build -o myapp
+
+# Etapa 2: Imagen final liviana usando Alpine
+FROM alpine:latest
+
+# Instalar certificados
+RUN apk --no-cache add ca-certificates
+
+# Crear usuario no root
+RUN addgroup -S appgroup && adduser -S appuser -G appgroup
+
+# Establecer el directorio de trabajo
+WORKDIR /app
+
+# Copiar el binario y el archivo de entorno desde la etapa anterior
+COPY --from=builder /app/myapp .
+COPY --from=builder /app/.env .
+
+# Asignar permisos al usuario no root
+RUN chown -R appuser:appgroup /app
+
+# Definir variable de entorno
+ENV ENV_PATH=/app/.env
+
+# Cambiar al usuario no root
+USER appuser
+
+# Exponer el puerto de la app
+EXPOSE 8070
+
+# Comando de inicio
+CMD ["./myapp"]
