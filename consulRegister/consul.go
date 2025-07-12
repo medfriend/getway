@@ -145,6 +145,14 @@ func RegisterConstants(consulClient *api.Client) {
 		"SERVICE_ADDRESS": os.Getenv("SECURITY_SERVICE_ADDRESS"),
 	}
 
+	pai360Data := map[string]string{
+		"SERVICE_ID":      os.Getenv("PAI360_SERVICE_ID"),
+		"SERVICE_NAME":    os.Getenv("PAI360_SERVICE_NAME"),
+		"SERVICE_PORT":    os.Getenv("PAI360_SERVICE_PORT"),
+		"SERVICE_PATH":    os.Getenv("PAI360_SERVICE_ADDRESS"),
+		"SERVICE_ADDRESS": os.Getenv("PAI360_SERVICE_ADDRESS"),
+	}
+
 	dbLocalData := map[string]string{
 		"DB_HOST":           os.Getenv("DB_HOST_LOCAL"),
 		"DB_PORT":           os.Getenv("DB_PORT_LOCAL"),
@@ -158,6 +166,7 @@ func RegisterConstants(consulClient *api.Client) {
 		"DB_NAME_SERVICE":   os.Getenv("DB_NAME_SERVICE_LOCAL"),
 		"DB_NAME_PAYMENT":   os.Getenv("DB_NAME_PAYMENT_LOCAL"),
 		"DB_NAME_LAW":       os.Getenv("DB_NAME_LAW_LOCAL"),
+		"DB_NAME_PAI360":    os.Getenv("DB_NAME_PAI360_LOCAL"),
 	}
 
 	rabbitmqData := map[string]string{
@@ -185,6 +194,7 @@ func RegisterConstants(consulClient *api.Client) {
 	consul.StoreKeyValue(consulClient, "SERVICE", handleJson(ServiceData))
 	consul.StoreKeyValue(consulClient, "PAYMENT", handleJson(PaymentData))
 	consul.StoreKeyValue(consulClient, "SECURITY", handleJson(securityData))
+	consul.StoreKeyValue(consulClient, "PAI360", handleJson(pai360Data))
 	consul.StoreKeyValue(consulClient, "LAWYER", handleJson(LaywerData))
 
 	consul.StoreKeyValue(consulClient, "DB_LOCAL", handleJson(dbLocalData))
